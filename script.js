@@ -171,9 +171,82 @@
     els.loading.classList.remove("hidden");
     els.error.classList.add("hidden");
     try {
-      allFixtures = await window.MatchMindAPI.fetchFixtures();
-      applyFilters();
-      updateAccuracy();
+      async function init() {
+       els.loading.classList.remove("hidden");
+      els.error.classList.add("hidden");
+
+    try {
+      const SUPABASE_URL =
+      "https://cydhljhhqzqgexmmvkct.supabase.co";
+
+      const SUPABASE_KEY =
+      "sb_publishable_m035JVbLCnHc-d2YKb_ncQ_3xpGiXKY";
+
+      const response = await fetch(
+      `${SUPABASE_URL}/rest/v1/predictions?select=id,sport,competition,home_team,away_team,match_date,market,selection,home_score,away_score,confidence,status,analysis&status=eq.published&order=match_date.asc`,
+      {
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${SUPABASE_KEY}`
+        }
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        `Supabase error: ${response.status}`
+      );
+    }
+
+    const predictions = await response.json();
+
+    allFixtures = predictions.map((p) => ({
+      id: String(p.id),
+      sport: p.sport,
+      league: p.competition || "Other Competition",
+      country: "",
+      home: p.home_team,
+      away: p.away_team,
+      homeCode: (p.home_team || "H")
+        .slice(0, 3)
+        .toUpperCase(),
+      awayCode: (p.away_team || "A")
+        .slice(0, 3)
+        .toUpperCase(),
+      date: p.match_date,
+      status: "Published",
+      market: p.market,
+      selection: p.selection,
+      score:
+        p.home_score != null && p.away_score != null
+          ? `${p.home_score} - ${p.away_score}`
+          : "Not provided",
+      confidence:
+        (p.confidence || "low").charAt(0).toUpperCase() +
+        (p.confidence || "low").slice(1),
+      probability: null,
+      reason: p.analysis || "Analysis not provided.",
+      source: "Supabase",
+      updated: "Database record",
+      analysis: {
+        stats: p.analysis || "No additional analysis provided."
+      }
+    }));
+
+    applyFilters();
+    updateAccuracy();
+
+  } catch (error) {
+    els.error.textContent =
+      error.message || "Could not load published predictions.";
+    els.error.classList.remove("hidden");
+    showToast("Match data could not be loaded.");
+  } finally {
+    els.loading.classList.add("hidden");
+  }
+}
+
+
     } catch (error) {
       els.error.textContent = error.message || "Could not load match data.";
       els.error.classList.remove("hidden");
