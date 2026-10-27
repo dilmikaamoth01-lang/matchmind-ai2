@@ -1,0 +1,581 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MatchMind AI | Admin Dashboard</title>
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0b1020;
+      color: #eef2ff;
+    }
+
+    header {
+      padding: 20px;
+      background: #141c32;
+      border-bottom: 1px solid #293653;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    h1 { margin: 0; font-size: 22px; }
+    h2 { font-size: 20px; }
+    p { color: #b9c5dc; }
+
+    main {
+      max-width: 1050px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .panel {
+      background: #141c32;
+      padding: 20px;
+      margin-bottom: 20px;
+      border: 1px solid #293653;
+      border-radius: 14px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 6px;
+      color: #cbd5e1;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #354461;
+      background: #0b1020;
+      color: white;
+      font: inherit;
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .full { grid-column: 1 / -1; }
+
+    button {
+      border: 0;
+      border-radius: 8px;
+      padding: 12px 16px;
+      cursor: pointer;
+      font-weight: bold;
+      background: #647cff;
+      color: white;
+      margin: 4px 4px 4px 0;
+    }
+
+    button.secondary { background: #34425f; }
+    button.danger { background: #b93852; }
+
+    button:disabled { opacity: .5; cursor: wait; }
+
+    .hidden { display: none !important; }
+
+    #message {
+      padding: 12px;
+      margin: 12px 0;
+      border-radius: 8px;
+      background: #202c46;
+      overflow-wrap: anywhere;
+    }
+
+    .prediction {
+      padding: 16px 0;
+      border-bottom: 1px solid #34425f;
+    }
+
+    .prediction:last-child { border-bottom: 0; }
+
+    .tag {
+      display: inline-block;
+      background: #26395d;
+      border-radius: 20px;
+      padding: 4px 9px;
+      font-size: 12px;
+      margin: 3px;
+    }
+
+    .muted { color: #a8b6d0; font-size: 13px; }
+
+    @media (max-width: 650px) {
+      main { padding: 12px; }
+      .panel { padding: 15px; }
+      .grid { grid-template-columns: 1fr; }
+      .full { grid-column: auto; }
+      h1 { font-size: 19px; }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>🧠 MatchMind AI — Admin</h1>
+    <button id="logoutBtn" class="secondary hidden" type="button">
+      Log out
+    </button>
+  </header>
+
+  <main>
+    <div id="message" role="status" aria-live="polite">
+      Enter your administrator login.
+    </div>
+
+    <section id="loginPanel" class="panel">
+      <h2>Administrator Login</h2>
+      <p>Sign in with the account you registered in Supabase.</p>
+
+      <form id="loginForm">
+        <label for="email">Email</label>
+        <input id="email" type="email" autocomplete="username"
+               required>
+
+        <br><br>
+
+        <label for="password">Password</label>
+        <input id="password" type="password"
+               autocomplete="current-password" required>
+
+        <br><br>
+
+        <button type="submit">Sign in</button>
+      </form>
+    </section>
+
+    <section id="dashboard" class="hidden">
+      <div class="panel">
+        <h2 id="formTitle">Add a prediction</h2>
+
+        <form id="predictionForm">
+          <div class="grid">
+
+            <div>
+              <label for="sport">Sport</label>
+              <select id="sport" required>
+                <option value="Football">Football</option>
+                <option value="Basketball">Basketball</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="competition">Competition / League</label>
+              <input id="competition" required
+                     placeholder="e.g. Premier League">
+            </div>
+
+            <div>
+              <label for="homeTeam">Home team</label>
+              <input id="homeTeam" required>
+            </div>
+
+            <div>
+              <label for="awayTeam">Away team</label>
+              <input id="awayTeam" required>
+            </div>
+
+            <div>
+              <label for="matchDate">Match date and time</label>
+              <input id="matchDate" type="datetime-local" required>
+            </div>
+
+            <div>
+              <label for="market">Prediction market</label>
+              <select id="market" required>
+                <option value="1X2">1X2 / Team win</option>
+                <option value="Double Chance">Double Chance</option>
+                <option value="Total Goals">Total Goals / Points</option>
+                <option value="Both Teams To Score">Both Teams To Score</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <div class="full">
+              <label for="selection">Prediction selection</label>
+              <input id="selection" required
+                     placeholder="e.g. Home win or Under 3.5 goals">
+            </div>
+
+            <div>
+              <label for="homeScore">Expected home score</label>
+              <input id="homeScore" type="number" min="0" step="1">
+            </div>
+
+            <div>
+              <label for="awayScore">Expected away score</label>
+              <input id="awayScore" type="number" min="0" step="1">
+            </div>
+
+            <div>
+              <label for="confidence">Confidence</label>
+              <select id="confidence" required>
+                <option value="Low">Low</option>
+                <option value="Medium" selected>Medium</option>
+                <option value="High">High</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="status">Publishing status</label>
+              <select id="status" required>
+                <option value="draft">Draft</option>
+                <option value="published">Published</option>
+              </select>
+            </div>
+
+            <div class="full">
+              <label for="analysis">Analysis and reasons</label>
+              <textarea id="analysis"
+                        placeholder="Enter the supporting analysis..."></textarea>
+            </div>
+
+            <div class="full">
+              <label for="actualResult">Actual result (optional)</label>
+              <input id="actualResult"
+                     placeholder="e.g. 2-1">
+            </div>
+
+          </div>
+
+          <br>
+          <button id="saveBtn" type="submit">Save prediction</button>
+          <button id="cancelEditBtn" class="secondary hidden"
+                  type="button">Cancel edit</button>
+        </form>
+      </div>
+
+      <div class="panel">
+        <h2>Existing predictions</h2>
+        <button id="refreshBtn" class="secondary" type="button">
+          Refresh
+        </button>
+        <div id="predictionList">Loading predictions...</div>
+      </div>
+    </section>
+  </main>
+
+  <script type="module">
+    import { createClient } from
+      "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+    // Replace these two values with your own Supabase project details.
+    const SUPABASE_URL = "PASTE_YOUR_PROJECT_URL_HERE";
+    const SUPABASE_KEY = "PASTE_YOUR_PUBLISHABLE_OR_ANON_KEY_HERE";
+
+    const message = document.getElementById("message");
+    const loginPanel = document.getElementById("loginPanel");
+    const dashboard = document.getElementById("dashboard");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const loginForm = document.getElementById("loginForm");
+    const predictionForm = document.getElementById("predictionForm");
+    const predictionList = document.getElementById("predictionList");
+    const saveBtn = document.getElementById("saveBtn");
+    const cancelEditBtn = document.getElementById("cancelEditBtn");
+
+    let supabase;
+    let editingId = null;
+    let busy = false;
+
+    function showMessage(text) {
+      message.textContent = text;
+    }
+
+    function setBusy(value) {
+      busy = value;
+      saveBtn.disabled = value;
+      document.querySelector("#loginForm button").disabled = value;
+    }
+
+    function value(id) {
+      return document.getElementById(id).value.trim();
+    }
+
+    function optionalNumber(id) {
+      const v = value(id);
+      return v === "" ? null : Number(v);
+    }
+
+    function dateToInput(dateValue) {
+      if (!dateValue) return "";
+      const d = new Date(dateValue);
+      const local = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
+      return local.toISOString().slice(0, 16);
+    }
+
+    function escapeHTML(text) {
+      return String(text ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[char]);
+    }
+
+    function resetForm() {
+      predictionForm.reset();
+      editingId = null;
+      document.getElementById("formTitle").textContent = "Add a prediction";
+      saveBtn.textContent = "Save prediction";
+      cancelEditBtn.classList.add("hidden");
+    }
+
+    async function checkAdmin() {
+      const { data: { user }, error } = await supabase.auth.getUser();
+
+      if (error || !user) {
+        loginPanel.classList.remove("hidden");
+        dashboard.classList.add("hidden");
+        logoutBtn.classList.add("hidden");
+        return;
+      }
+
+      // The signed-in user must have a row in admin_users.
+      const { data: admin, error: adminError } = await supabase
+        .from("admin_users")
+        .select("user_id")
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+      if (adminError || !admin) {
+        await supabase.auth.signOut();
+        loginPanel.classList.remove("hidden");
+        dashboard.classList.add("hidden");
+        logoutBtn.classList.add("hidden");
+        showMessage("Access denied: this account is not an authorized admin.");
+        return;
+      }
+
+      loginPanel.classList.add("hidden");
+      dashboard.classList.remove("hidden");
+      logoutBtn.classList.remove("hidden");
+      showMessage("Signed in securely as an administrator.");
+      await loadPredictions();
+    }
+
+    loginForm.addEventListener("submit", async event => {
+      event.preventDefault();
+      if (busy) return;
+
+      setBusy(true);
+      try {
+        const { error } = await supabase.auth.signInWithPassword({
+          email: value("email"),
+          password: document.getElementById("password").value
+        });
+
+        if (error) throw error;
+        await checkAdmin();
+      } catch (error) {
+        showMessage("Login failed: " + error.message);
+      } finally {
+        setBusy(false);
+      }
+    });
+
+    logoutBtn.addEventListener("click", async () => {
+      await supabase.auth.signOut();
+      resetForm();
+      await checkAdmin();
+      showMessage("You have logged out.");
+    });
+
+    predictionForm.addEventListener("submit", async event => {
+      event.preventDefault();
+      if (busy) return;
+
+      const payload = {
+        sport: value("sport"),
+        competition: value("competition"),
+        home_team: value("homeTeam"),
+        away_team: value("awayTeam"),
+        match_date: new Date(value("matchDate")).toISOString(),
+        market: value("market"),
+        selection: value("selection"),
+        home_score: optionalNumber("homeScore"),
+        away_score: optionalNumber("awayScore"),
+        confidence: value("confidence"),
+        status: value("status"),
+        analysis: value("analysis") || null,
+        actual_result: value("actualResult") || null
+      };
+
+      if (!Number.isFinite(Date.parse(payload.match_date))) {
+        showMessage("Please enter a valid match date and time.");
+        return;
+      }
+
+      setBusy(true);
+      try {
+        let result;
+
+        if (editingId !== null) {
+          result = await supabase
+            .from("predictions")
+            .update(payload)
+            .eq("id", editingId);
+        } else {
+          result = await supabase
+            .from("predictions")
+            .insert(payload);
+        }
+
+        if (result.error) throw result.error;
+
+        showMessage(editingId !== null
+          ? "Prediction updated successfully."
+          : "Prediction saved successfully.");
+
+        resetForm();
+        await loadPredictions();
+      } catch (error) {
+        showMessage("Could not save prediction: " + error.message);
+      } finally {
+        setBusy(false);
+      }
+    });
+
+    async function loadPredictions() {
+      predictionList.textContent = "Loading predictions...";
+
+      const { data, error } = await supabase
+        .from("predictions")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(100);
+
+      if (error) {
+        predictionList.textContent = "Could not load predictions: " + error.message;
+        return;
+      }
+
+      if (!data || data.length === 0) {
+        predictionList.textContent = "No predictions yet. Add your first one above.";
+        return;
+      }
+
+      predictionList.replaceChildren();
+
+      for (const item of data) {
+        const article = document.createElement("article");
+        article.className = "prediction";
+
+        const title = document.createElement("h3");
+        title.textContent = `${item.home_team} vs ${item.away_team}`;
+        article.appendChild(title);
+
+        const details = document.createElement("p");
+        details.innerHTML =
+          `<span class="tag">${escapeHTML(item.sport)}</span>` +
+          `<span class="tag">${escapeHTML(item.status)}</span>` +
+          `<span class="tag">${escapeHTML(item.confidence)}</span>` +
+          `<br>${escapeHTML(item.competition)}<br>` +
+          `${escapeHTML(item.market)}: ${escapeHTML(item.selection)}<br>` +
+          `Expected score: ${escapeHTML(item.home_score ?? "—")} - ` +
+          `${escapeHTML(item.away_score ?? "—")}<br>` +
+          `<span class="muted">Match: ${escapeHTML(
+            item.match_date ? new Date(item.match_date).toLocaleString() : "Not set"
+          )}</span>`;
+        article.appendChild(details);
+
+        const editButton = document.createElement("button");
+        editButton.textContent = "Edit";
+        editButton.addEventListener("click", () => editPrediction(item));
+        article.appendChild(editButton);
+
+        const deleteButton = document.createElement("button");
+        deleteButton.textContent = "Delete";
+        deleteButton.className = "danger";
+        deleteButton.addEventListener("click", () => deletePrediction(item));
+        article.appendChild(deleteButton);
+
+        predictionList.appendChild(article);
+      }
+    }
+
+    function editPrediction(item) {
+      editingId = item.id;
+
+      document.getElementById("sport").value = item.sport || "Football";
+      document.getElementById("competition").value = item.competition || "";
+      document.getElementById("homeTeam").value = item.home_team || "";
+      document.getElementById("awayTeam").value = item.away_team || "";
+      document.getElementById("matchDate").value = dateToInput(item.match_date);
+      document.getElementById("market").value = item.market || "1X2";
+      document.getElementById("selection").value = item.selection || "";
+      document.getElementById("homeScore").value = item.home_score ?? "";
+      document.getElementById("awayScore").value = item.away_score ?? "";
+      document.getElementById("confidence").value = item.confidence || "Medium";
+      document.getElementById("status").value = item.status || "draft";
+      document.getElementById("analysis").value = item.analysis || "";
+      document.getElementById("actualResult").value = item.actual_result || "";
+
+      document.getElementById("formTitle").textContent = "Edit prediction";
+      saveBtn.textContent = "Update prediction";
+      cancelEditBtn.classList.remove("hidden");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    async function deletePrediction(item) {
+      if (!window.confirm(`Delete ${item.home_team} vs ${item.away_team}?`)) {
+        return;
+      }
+
+      const { error } = await supabase
+        .from("predictions")
+        .delete()
+        .eq("id", item.id);
+
+      if (error) {
+        showMessage("Could not delete: " + error.message);
+        return;
+      }
+
+      showMessage("Prediction deleted.");
+      await loadPredictions();
+    }
+
+    cancelEditBtn.addEventListener("click", resetForm);
+    document.getElementById("refreshBtn").addEventListener("click", loadPredictions);
+
+    try {
+      if (
+        SUPABASE_URL.includes("PASTE_YOUR") ||
+        SUPABASE_KEY.includes("PASTE_YOUR")
+      ) {
+        throw new Error("Add your Supabase Project URL and publishable/anon key in admin.html.");
+      }
+
+      supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+      await checkAdmin();
+
+      supabase.auth.onAuthStateChange(() => {
+        // Refresh the login/admin state after authentication changes.
+        setTimeout(() => checkAdmin(), 0);
+      });
+    } catch (error) {
+      showMessage(error.message);
+    }
+  </script>
+</body>
+</html>
