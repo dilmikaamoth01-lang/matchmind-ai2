@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0a1020">
+  <meta name="description" content="MatchMind AI sports analytics dashboard for football and basketball.">
+  <title>MatchMind AI — Read the Game. Understand the Numbers.</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="topbar">
+    <a class="brand" href="#home" aria-label="MatchMind AI home">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 48 48" role="img"><circle cx="24" cy="24" r="19" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M24 12 32 18 29 28 19 28 16 18Z M16 18 8 21 M32 18 40 21 M19 28 16 37 M29 28 33 37 M24 12V5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M9 39 17 33 23 36 30 29 38 31" fill="none" stroke="#5fe6bd" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+      <span><strong>MatchMind <em>AI</em></strong><small>READ THE GAME. UNDERSTAND THE NUMBERS.</small></span>
+    </a>
+    <button class="icon-btn mobile-menu-btn" id="menuToggle" aria-label="Open navigation" aria-expanded="false">☰</button>
+    <nav class="main-nav" id="mainNav" aria-label="Main navigation">
+      <a href="#home" class="nav-link active">Home</a>
+      <a href="#football" class="nav-link">Football</a>
+      <a href="#basketball" class="nav-link">Basketball</a>
+      <a href="#predictions" class="nav-link">Today’s Predictions</a>
+      <a href="#results" class="nav-link">Results &amp; Accuracy</a>
+      <a href="#about" class="nav-link">About</a>
+    </nav>
+    <div class="top-actions">
+      <button class="icon-btn" id="focusSearch" aria-label="Focus match search" title="Search matches">⌕</button>
+      <button class="icon-btn" id="themeToggle" aria-label="Toggle color theme" title="Toggle theme">☼</button>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero page-section" id="home">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="live-dot"></span> SPORTS INTELLIGENCE, MADE CLEAR</div>
+        <h1>Smarter sports<br>predictions start <span>here.</span></h1>
+        <p>Explore football and basketball match insights through performance data, tactical context, and transparent statistical models.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#football">Explore Football <span>↗</span></a>
+          <a class="btn btn-secondary" href="#basketball">Explore Basketball</a>
+          <a class="text-link" href="#predictions">Today’s matches →</a>
+        </div>
+        <div class="trust-row">
+          <span>✓ Clear methodology</span><span>✓ No guaranteed outcomes</span><span>✓ Demo data clearly marked</span>
+        </div>
+      </div>
+      <div class="hero-visual" aria-label="Illustrative sports analytics graphic">
+        <div class="visual-glow"></div>
+        <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+        <div class="visual-ball">⚽</div>
+        <div class="chart-card floating-card">
+          <div class="mini-label">MODEL WORKSPACE <span class="status-pill">DEMO</span></div>
+          <div class="chart-head"><strong>Match outlook</strong><span>Illustrative</span></div>
+          <div class="bars"><i style="height:38%"></i><i style="height:55%"></i><i style="height:45%"></i><i style="height:72%"></i><i style="height:62%"></i><i style="height:88%"></i><i style="height:78%"></i><i style="height:100%"></i><i style="height:69%"></i><i style="height:84%"></i></div>
+          <div class="chart-foot"><span>Input features</span><b>Data → Model → Insight</b></div>
+        </div>
+        <div class="visual-tag tag-left"><span class="tag-icon">⌁</span><span><b>Performance first</b><small>Beyond recent results</small></span></div>
+        <div class="visual-tag tag-right"><span class="tag-icon">◎</span><span><b>Transparent estimates</b><small>Uncertainty included</small></span></div>
+      </div>
+    </section>
+
+    <section class="stats-strip" aria-label="Platform status">
+      <div><span class="stat-icon">◷</span><span><small>FIXTURES</small><strong id="fixtureCount">—</strong></span></div>
+      <div><span class="stat-icon">⚽</span><span><small>SPORTS COVERED</small><strong>Football &amp; Basketball</strong></span></div>
+      <div><span class="stat-icon">◎</span><span><small>TRACKING</small><strong id="settledCount">No settled demo records</strong></span></div>
+      <div><span class="stat-icon">⌁</span><span><small>DATA MODE</small><strong><i class="tiny-dot"></i> Local demo dataset</strong></span></div>
+    </section>
+
+    <section class="page-section" id="predictions">
+      <div class="section-heading">
+        <div><div class="eyebrow">THE MATCH CENTRE</div><h2>Featured predictions<span class="heading-dot">.</span></h2><p>Sample fixtures to explore the interface. These are not live matches or real forecasts.</p></div>
+        <a class="text-link" href="#football">Browse all matches →</a>
+      </div>
+      <div class="toolbar">
+        <div class="search-wrap"><span>⌕</span><input id="globalSearch" type="search" placeholder="Search teams or competitions…" aria-label="Search teams or competitions"></div>
+        <select id="sportFilter" aria-label="Filter by sport"><option value="all">All sports</option><option value="football">Football</option><option value="basketball">Basketball</option></select>
+        <select id="marketFilter" aria-label="Filter by prediction market"><option value="all">All markets</option><option value="1X2">1X2</option><option value="Double Chance">Double chance</option><option value="Goals">Goals total</option><option value="Winner">Team winner</option><option value="Points">Total points</option></select>
+        <select id="sortFilter" aria-label="Sort matches"><option value="date">Kickoff time</option><option value="confidence">Confidence label</option></select>
+      </div>
+      <div id="loadingState" class="state-panel hidden"><span class="spinner"></span> Loading match data…</div>
+      <div id="errorState" class="state-panel hidden">Match data could not be loaded. Check your data source and try again.</div>
+      <div id="matchGrid" class="match-grid" aria-live="polite"></div>
+      <div id="emptyState" class="empty-state hidden"><div>⌕</div><h3>No matches found</h3><p>Try another team name or change your filters.</p><button class="btn btn-secondary" id="clearFilters">Clear filters</button></div>
+      <p class="demo-note"><span>ⓘ</span> <b>Demo mode:</b> teams, fixtures, model estimates and analysis text in this starter are illustrative. Connect a verified data provider before publishing real-world predictions.</p>
+    </section>
+
+    <section class="page-section split-section" id="football">
+      <div class="section-heading">
+        <div><div class="eyebrow">THE WORLD GAME</div><h2>Football intelligence<span class="heading-dot">.</span></h2><p>Explore fixture lists, market selections and the factors a model should consider.</p></div>
+        <span class="section-chip">FOOTBALL</span>
+      </div>
+      <div class="filter-panel">
+        <label>Match date<select id="footballDate"><option value="all">All demo dates</option><option value="today">Today</option><option value="tomorrow">Tomorrow</option></select></label>
+        <label>Competition<select id="footballLeague"><option value="all">All competitions</option><option value="Premier League">Premier League</option><option value="La Liga">La Liga</option><option value="Serie A">Serie A</option><option value="Champions League">Champions League</option></select></label>
+        <label>Match status<select id="footballStatus"><option value="all">All statuses</option><option value="upcoming">Upcoming</option><option value="live">Live</option><option value="completed">Completed</option></select></label>
+        <button class="btn btn-secondary" id="applyFootballFilters">Apply filters</button>
+      </div>
+      <div id="footballSummary" class="inline-summary"></div>
+    </section>
+
+    <section class="page-section split-section" id="basketball">
+      <div class="section-heading">
+        <div><div class="eyebrow">COURT-SIDE ANALYTICS</div><h2>Basketball intelligence<span class="heading-dot">.</span></h2><p>Review winner and total-points markets with clear data availability notes.</p></div>
+        <span class="section-chip cyan-chip">BASKETBALL</span>
+      </div>
+      <div class="filter-panel">
+        <label>Competition<select id="basketLeague"><option value="all">All competitions</option><option value="NBA">NBA</option><option value="WNBA">WNBA</option><option value="EuroLeague">EuroLeague</option><option value="Domestic">Domestic leagues</option></select></label>
+        <label>Market<select id="basketMarket"><option value="all">All markets</option><option value="Winner">Team winner</option><option value="Points">Total points</option></select></label>
+        <label>Team search<input id="basketTeam" type="search" placeholder="Search a team"></label>
+        <button class="btn btn-secondary" id="applyBasketFilters">Apply filters</button>
+      </div>
+      <div id="basketSummary" class="inline-summary"></div>
+    </section>
+
+    <section class="page-section results-section" id="results">
+      <div class="section-heading">
+        <div><div class="eyebrow">MEASURE WHAT MATTERS</div><h2>Results &amp; accuracy<span class="heading-dot">.</span></h2><p>Performance tracking should be based only on predictions with confirmed final outcomes.</p></div>
+        <span class="section-chip">TRACKING</span>
+      </div>
+      <div class="results-grid">
+        <div class="metric-card"><small>SETTLED PREDICTIONS</small><strong id="evaluatedMetric">0</strong><span>Confirmed outcomes only</span></div>
+        <div class="metric-card"><small>CORRECT PREDICTIONS</small><strong id="correctMetric">0</strong><span>Verified against results</span></div>
+        <div class="metric-card"><small>HISTORICAL ACCURACY</small><strong id="accuracyMetric">—</strong><span>No claim without records</span></div>
+      </div>
+      <div class="chart-panel">
+        <div class="chart-panel-head"><div><h3>Accuracy over time</h3><p>Chart appears when settled historical data is available.</p></div><span class="section-chip">HISTORY</span></div>
+        <div id="accuracyChart" class="empty-chart"><span class="chart-empty-icon">⌁</span><strong>Not enough verified history yet</strong><small>No sample accuracy has been fabricated.</small></div>
+      </div>
+      <p class="formula-note"><b>Accuracy = Correct Predictions / Total Settled Predictions × 100</b><br>Pending matches are excluded. Historical accuracy does not guarantee future performance.</p>
+    </section>
+
+    <section class="page-section about-section" id="about">
+      <div class="about-copy"><div class="eyebrow">BUILT AROUND TRANSPARENCY</div><h2>Read the game.<br><span>Understand the numbers.</span></h2><p>MatchMind AI is designed to make sports analysis easier to explore without hiding uncertainty. The interface separates verified data, model estimates, and illustrative examples.</p></div>
+      <div class="principles">
+        <div><span>01</span><section><b>Evidence before narrative</b><p>Use underlying performance, availability and context when reliable inputs exist.</p></section></div>
+        <div><span>02</span><section><b>Uncertainty is part of the answer</b><p>Probabilities are estimates, not promises. Confidence should reflect evidence quality.</p></section></div>
+        <div><span>03</span><section><b>Sources stay visible</b><p>Production predictions should include source attribution and last-updated timestamps.</p></section></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-top"><a class="brand footer-brand" href="#home"><span class="brand-mark">⌁</span><span><strong>MatchMind <em>AI</em></strong><small>READ THE GAME. UNDERSTAND THE NUMBERS.</small></span></a><p>Sports insight, with the uncertainty left in.</p></div>
+    <div class="footer-bottom"><span>© 2026 MatchMind AI · Frontend starter</span><div><a href="#about">About</a><a href="mailto:contact@example.com">Contact</a><a href="#legal">Privacy</a><a href="#legal">Terms</a><a href="#legal">Responsible use</a></div></div>
+    <p class="disclaimer" id="legal">Disclaimer: sports predictions involve uncertainty and are provided for informational and entertainment purposes only. No outcome is guaranteed. Demo content is illustrative and must not be treated as live data or professional advice.</p>
+  </footer>
+
+  <div class="modal-backdrop hidden" id="analysisModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="analysis-modal">
+      <div class="modal-head"><div><div class="eyebrow">MATCHMIND ANALYSIS</div><h2 id="modalTitle">Match analysis</h2></div><button class="icon-btn" id="closeModal" aria-label="Close analysis">×</button></div>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="data.js"></script>
+  <script src="api.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
