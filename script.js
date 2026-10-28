@@ -199,8 +199,8 @@
     }
 
     const predictions = await response.json();
-
-    allFixtures = predictions.map((p) => ({
+      console.log("Supabase response:", predictions);
+     allFixtures = predictions.map((p) => ({
       id: String(p.id),
       sport: p.sport,
       league: p.competition || "Other Competition",
