@@ -197,9 +197,15 @@
         `Supabase error: ${response.status}`
       );
     }
+      const predictions = await response.json();
+    if (predictions.length === 0) {
+        throw new Error(
+             "Supabase returned 0 published predictions. Check database access and RLS policies."
+       );
+    }
 
-    const predictions = await response.json();
-      console.log("Supabase response:", predictions);
+console.log("Supabase response:", predictions);
+
      allFixtures = predictions.map((p) => ({
       id: String(p.id),
       sport: p.sport,
